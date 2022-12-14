@@ -18,7 +18,7 @@ else
 				<th>Name</th>
 				<th>Manufacturer Code</th>
 				<th>Comment</th>
-					<th>Edit</th>
+				<th>Edit</th>
 				<th>Delete</th>
 			</tr>
 		</thead>
@@ -30,7 +30,7 @@ else
 					<td>@manufacturer.Name</td>
 					<td>@manufacturer.ManufacturerCode</td>
 					<td>@manufacturer.Comment</td>
-					<td><input type="button" value="Edit" class="btn btn-primary"/></td>
+					<td><input type="button" value="Edit" class="btn btn-primary" /></td>
 					<td><input type="button" value="Delete" class="btn btn-danger" @onclick="(() => DeleteBy(manufacturer))" data-toggle="modal" data-target="#manufacturerDeleteDialog" /></td>
 				</tr>
 			}
@@ -55,8 +55,8 @@ else
 		//await JS.InvokeAsync<object>("alert", $"d{manufacturer.Id}번을 지울건가요?");
 		await repository.DeleteManufacturer(manufacturer.Id);   // 삭제
 		await JS.InvokeAsync<object>("closeModal", "manufacturerDeleteDialog");
-		manufacturers = await repository.GetManufacturers();	// 다시 불러오기
-		manufacturer = new Manufacturer();						// 선택 항목 초기화
+		manufacturers = await repository.GetManufacturers();    // 다시 불러오기
+		manufacturer = new Manufacturer();                      // 선택 항목 초기화
 	}
 
 	private void DeleteBy(Manufacturer manu)
