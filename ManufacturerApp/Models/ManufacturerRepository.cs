@@ -37,7 +37,8 @@ namespace ManufacturerApp.Models
         /// <returns></returns>
         public async Task<Manufacturer> GetManufacturer(int id)
         {
-            return await _context.Manufacturers.Where(m => m.Id == id).SingleOrDefaultAsync();
+            //return await _context.Manufacturers.Where(m => m.Id == id).SingleOrDefaultAsync();
+            return await _context.Manufacturers.FindAsync();
         }
         /// <summary>
         /// 수정
@@ -59,7 +60,8 @@ namespace ManufacturerApp.Models
         /// <exception cref="NotImplementedException"></exception>
         public async Task DeleteManufacturer(int id)
         {
-            var manufacturer = await _context.Manufacturers.Where(m => m.Id == id).SingleOrDefaultAsync();
+            //var manufacturer = await _context.Manufacturers.Where(m => m.Id == id).SingleOrDefaultAsync();
+            var manufacturer = await _context.Manufacturers.FindAsync(id);
             if (manufacturer != null)
             {
                 _context.Manufacturers.Remove(manufacturer);

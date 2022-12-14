@@ -1,5 +1,6 @@
 using ManufacturerApp.Areas.Identity;
 using ManufacturerApp.Data;
+using ManufacturerApp.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -20,6 +21,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 builder.Services.AddSingleton<WeatherForecastService>();
+
+// EF Core ¸¸µç°Å
+builder.Services.AddTransient<IManufacturerRepository, ManufacturerRepository>();
 
 var app = builder.Build();
 
