@@ -31,7 +31,7 @@ else
 					<td>@manufacturer.ManufacturerCode</td>
 					<td>@manufacturer.Comment</td>
 					<td><input type="button" value="Edit" class="btn btn-primary" /></td>
-					<td><input type="button" value="Delete" class="btn btn-danger" @onclick="(() => DeleteBy(manufacturer))" data-toggle="modal" data-target="#manufacturerDeleteDialog" /></td>
+					<td><input type="button" value="Delete" class="btn btn-danger" @onclick="(() => DeleteBy(manufacturer))" data-bs-toggle="modal" data-bs-target="#manufacturerDeleteDialog" /></td>
 				</tr>
 			}
 		</tbody>
