@@ -1,0 +1,156 @@
+﻿@using Dul.Web
+
+<div class="d-flex">
+    <ul class="pagination pagination-sm mx-auto">
+        @*처음 링크*@
+        @if (Model.PageNumber == 1)
+        {
+            <li class="page-item">
+                <a class="page-link order-first btn disabled"><span style="font-size:7pt;">FIRST</span></a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link order-first" @onclick="@(() => PagerButtonClicked(1))"><span style="font-size:8pt;">FIRST</span></a>
+            </li>
+        }
+
+        @*이전 n개 링크*@
+        @if (Model.PageNumber > Model.PagerButtonCount)
+        {
+            int prev = ((Model.PageNumber - 1) / (int)Model.PagerButtonCount) * Model.PagerButtonCount;
+            <li class="page-item">
+                <a class="page-link prev" @onclick="@(() => PagerButtonClicked(prev))"><span style="font-size:7pt;">-@Model.PagerButtonCount</span></a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link prev btn disabled"><span style="font-size:7pt;">-@Model.PagerButtonCount</span></a>
+            </li>
+        }
+
+        @*이전 링크*@
+        @if (Model.PageNumber > 1)
+        {
+            int prev = Model.PageNumber - 1;
+            <li class="page-item">
+                <a class="page-link prev" @onclick="@(() => PagerButtonClicked(prev))"><span style="font-size:7pt;">PREV</span></a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link prev btn disabled"><span style="font-size:7pt;">PREV</span></a>
+            </li>
+        }
+
+        @*페이지 수만큼 숫자 버튼 출력*@
+        @{
+            int i = 0;
+            for (i = (((Model.PageNumber - 1) / (int)Model.PagerButtonCount) * Model.PagerButtonCount + 1); i <= ((((Model.PageNumber - 1) / (int)Model.PagerButtonCount + 1))); i++)
+            {
+                var currentIndex = i;
+                if (i > Model.PageCount)
+                    break;  // 페이지 수보다 크면 종료
+
+                // 현재 보고 있는 페이지면 링크 제거
+                if (i == Model.PageNumber)
+                {
+                    <li class="page-item active">
+                        <a class="page-link btn disabled">
+                            @i
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    if (Model.SearchMode)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" @onclick="(() => PagerButtonClicked(currentIndex))">
+                                @i
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" @onclick="(() => PagerButtonClicked(currentIndex))">
+                                @i
+                            </a>
+                        </li>
+                    }
+                }
+            }
+        }
+
+        @*다음 링크*@
+        @if (Model.PageNumber < Model.PageCount)
+        {
+            int next = Model.PageNumber + 1;
+            <li class="page-item">
+                <a class="page-link next" @onclick="@(() => PagerButtonClicked(next))"><span style="font-size:7pt;">NEXT</span></a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link next btn disabled"><span style="font-size:7pt;">NEXT</span></a>
+            </li>
+        }
+
+        @*다음 n개 링크*@
+        @if (i <= Model.PageCount)
+        {
+            int next = ((Model.PageNumber - 1) / (int)Model.PagerButtonCount) * Model.PagerButtonCount + (Model.PagerButtonCount + 1);
+            <li class="page-item">
+                <a class="page-link next" @onclick="@(() => PagerButtonClicked(next))"><span style="font-size:7pt;">+@Model.PagerButtonCount</span></a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link next btn disabled"><span style="font-size:7pt;">+@Model.PagerButtonCount</span></a>
+            </li>
+        }
+
+        @*마지막 링크*@
+        @if (Model.PageNumber != Model.PageCount)
+        {
+            <li class="page-item">
+                <a class="page-link first" @onclick="@(() => PagerButtonClicked(Model.PageCount))"><span style="font-size:7pt;">LAST</span></a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link order-last btn disabled"><span style="font-size:7pt;">LAST</span></a>
+            </li>
+        }
+    </ul>
+</div>
+
+@code {
+    [Parameter]
+    public PagerBase Model { get; set; }
+
+    protected override Task OnParametersSetAsync()
+    {
+        // Parameter가 넘어오면 자동으로 PageCount 계산
+        Model.PageCount = Convert.ToInt32(Math.Ceiling(Model.RecordCount / (double)Model.PageSize));
+        return base.OnParametersSetAsync();
+    }
+
+    [Parameter]
+    public Action<int> PageIndexChanged { get; set; }
+
+    protected void PagerButtonClicked(int pageNumber)
+    {
+        Model.PageNumber = pageNumber;
+        Model.PageIndex = pageNumber - 1;
+
+        PageIndexChanged?.Invoke(pageNumber - 1);
+    }
+}
